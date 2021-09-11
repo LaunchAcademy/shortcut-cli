@@ -1,32 +1,23 @@
-/**
- * Some predefined delay values (in milliseconds).
- */
-export enum Delays {
-  Short = 500,
-  Medium = 2000,
-  Long = 5000,
-}
+import Yargs from "yargs/yargs"
+import Search from "./shortcut/Search"
+import WorkflowList from "./shortcut/WorkflowList"
+import WorkflowMap from "./shortcut/WorkflowMap"
 
-/**
- * Returns a Promise<string> that resolves after a given time.
- *
- * @param {string} name - A name.
- * @param {number=} [delay=Delays.Medium] - A number of milliseconds to delay resolution of the Promise.
- * @returns {Promise<string>}
- */
-function delayedHello(
-  name: string,
-  delay: number = Delays.Medium,
-): Promise<string> {
-  return new Promise((resolve: (value?: string) => void) =>
-    setTimeout(() => resolve(`Hello, ${name}`), delay),
-  );
-}
 
-// Below are examples of using ESLint errors suppression
-// Here it is suppressing a missing return type definition for the greeter function.
+Yargs(process.argv.slice(2)).
+  scriptName("shortcut").usage('$0 <cmd> [args]').
+  help().
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  command('query', 'list stories requiring review', () => {}, async () => {
+    const token = process.env.SHORTCUT_API_KEY
+    const workflowList = new WorkflowList({token})
+    const workflows = await workflowList.retrieve()
+    const workflowMap = new WorkflowMap(workflows)
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function greeter(name: string) {
-  return await delayedHello(name, Delays.Long);
-}
+
+    const search = new Search({token})
+    const {data: stories } = await search.retrieve()
+    console.log(stories[0])
+    const workflow = workflowMap.get(stories[0].workflow_id)
+    console.log(workflow.stateMap.get(stories[0].workflow_state_id))
+  }).argv
