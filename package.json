@@ -1,6 +1,6 @@
 {
-  "name": "shortcut-cli",
-  "version": "0.0.0",
+  "name": "@launchacademy/shortcut-cli",
+  "version": "0.0.1",
   "description": "Query cli tool for shortcut",
   "engines": {
     "node": ">= 14.16 <15"
