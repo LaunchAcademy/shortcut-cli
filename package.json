@@ -1,5 +1,5 @@
 {
-  "name": "shortcut-cli",
+  "name": "@launchacademy/shortcut-cli",
   "version": "0.0.0",
   "description": "Query cli tool for shortcut",
   "engines": {

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import Yargs from "yargs/yargs"
 import path from "path"
 import { readFileSync } from "fs"
