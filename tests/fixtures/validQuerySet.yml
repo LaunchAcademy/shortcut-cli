@@ -1,0 +1,6 @@
+testProject:
+  apiKey: "1234123412-4123414314"
+  name: "Test Project"
+  queries:
+    - name: "Ready for Review"
+      query: 'state:"Ready for Review" project:"LaunchAcademy.com Website"'

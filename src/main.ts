@@ -1,7 +1,11 @@
 import Yargs from "yargs/yargs"
-import Search from "./shortcut/Search"
-import WorkflowList from "./shortcut/WorkflowList"
-import WorkflowMap from "./shortcut/WorkflowMap"
+import path from "path"
+import { readFileSync } from "fs"
+import QuerySetParsing from "./cli/QuerySetParsing"
+import SearchResultDisplay from "./cli/SearchResultDisplay"
+// import Search from "./shortcut/Search"
+// import WorkflowList from "./shortcut/WorkflowList"
+// import WorkflowMap from "./shortcut/WorkflowMap"
 
 
 Yargs(process.argv.slice(2)).
@@ -9,15 +13,10 @@ Yargs(process.argv.slice(2)).
   help().
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   command('query', 'list stories requiring review', () => {}, async () => {
-    const token = process.env.SHORTCUT_API_KEY
-    const workflowList = new WorkflowList({token})
-    const workflows = await workflowList.retrieve()
-    const workflowMap = new WorkflowMap(workflows)
-
-
-    const search = new Search({token})
-    const {data: stories } = await search.retrieve()
-    console.log(stories[0])
-    const workflow = workflowMap.get(stories[0].workflow_id)
-    console.log(workflow.stateMap.get(stories[0].workflow_state_id))
+    const querySetParsing = new QuerySetParsing()
+    const yamlPath = path.join(process.env["HOME"], ".shortcut.yml")
+    const querySet = querySetParsing.parse(readFileSync(yamlPath).toString())
+    const set = await querySet.retrieve()
+    const display = new SearchResultDisplay(set)
+    console.log(display.toCliString())
   }).argv

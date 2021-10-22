@@ -5,9 +5,13 @@
   "engines": {
     "node": ">= 14.16 <15"
   },
+  "bin": {
+    "shortcut": "./build/src/main.js"
+  },
   "devDependencies": {
     "@types/jest": "~26.0.23",
     "@types/node": "~14.14.45",
+    "@types/yaml": "^1.9.7",
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "~4.28.2",
     "@typescript-eslint/parser": "~4.28.2",
@@ -24,19 +28,24 @@
   },
   "scripts": {
     "start": "node build/src/main.js",
-    "clean": "rimraf coverage build tmp",
+    "clean": "yarn run rimraf coverage build tmp",
     "prebuild": "yarn run lint",
-    "build": "tsc -p tsconfig.release.json",
-    "build:watch": "tsc -w -p tsconfig.release.json",
-    "lint": "eslint . --ext .ts,.tsx",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "build": "yarn run tsc -p tsconfig.release.json",
+    "build:watch": "yarn run tsc -w -p tsconfig.release.json",
+    "lint": "yarn run eslint . --ext .ts,.tsx",
+    "test": "yarn run jest --coverage",
+    "test:watch": "yarn run jest --watch",
+    "ci": "yarn run test"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@types/lodash": "^4.14.172",
+    "chalk": "^4.1.2",
     "clubhouse-lib": "^0.12.0",
+    "deepmerge": "^4.2.2",
     "tslib": "~2.3.0",
+    "yaml": "^1.10.2",
     "yargs": "^17.1.1"
   }
 }
